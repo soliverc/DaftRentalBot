@@ -133,7 +133,7 @@ class GenerateLink:
                 raise DaftRentalBotFacilitiesStr
             if not all(item in available_facilities for item in facilities_name):
                 raise DaftRentalBotInvalidFacilities
-            if not facilities_name:
+            if facilities_name == []:
                 self.link += ""
             else:
                 for item in facilities_name:

@@ -31,17 +31,19 @@ class SetUp:
 
     def login(self):
         self.driver.get("http://www.daft.ie")
-        sleep(3)
+        sleep(1)
 
         self.driver.maximize_window()
         # Policy Button
+        
         self.driver.find_element(
-            By.XPATH, '//*[@id="js-cookie-modal-level-one"]/div/main/div/button[2]'
+            By.XPATH, '//*[@id="didomi-notice-agree-button"]'
         ).click()
         sleep(3)
         # Sign-in Button
+        
         self.driver.find_element(
-            By.XPATH, '//*[@id="__next"]/div[2]/header/div/div[2]/div[3]/ul/li[2]/a'
+            By.XPATH, '//*[@id="__next"]/div[2]/header/div/div[2]/div[3]/ul/li/a'
         ).click()
         sleep(3)
         # EmailID field
@@ -55,15 +57,17 @@ class SetUp:
         )
         sleep(3)
         # Sign-in button
+        # 
+        # old: '//*[@id="kc-login-form"]/div[2]/input'
         self.driver.find_element(
-            By.XPATH, '//*[@id="kc-login-form"]/div[2]/input'
+            By.XPATH, '//*[@id="login"]'
         ).click()
 
         # Checking if error occured after login
-        if self.driver.find_element(By.XPATH, "/html/body/div/div/div[2]"):
-            raise DaftRentalBotLoginError(
-                "Incorrect username or password. Please try again."
-            )
+        # if self.driver.find_element(By.XPATH, "/html/body/div/div/div[2]"):
+        #     raise DaftRentalBotLoginError(
+        #         "Incorrect username or password. Please try again."
+        #     )
 
         print("Logged in successfully!")
 
@@ -73,7 +77,7 @@ class Apply(SetUp):
         self.login()
         self.applied_url = None
         generate_link = GenerateLink()
-        self.link = generate_link.generate_filter_link()
+        self.link = "https://www.daft.ie/property-for-rent/ireland?rentalPrice_to=1800&location=cork-city&location=cork-city-centre-cork&location=cork-city-suburbs-cork&location=carrigaline-cork&location=ballincollig-cork&location=ovens-cork&numBeds_from=2"
         self.applicationProcess()
 
         # Run automation for this interval of time
@@ -107,7 +111,8 @@ class Apply(SetUp):
             print("Feedback form had popped up! I took care of it.")
 
     def applicationProcess(self):
-        self.driver.get(self.link)
+        
+        self.driver.get( "https://www.daft.ie/property-for-rent/ireland?rentalPrice_to=1800&location=cork-city&location=cork-city-centre-cork&location=cork-city-suburbs-cork&location=carrigaline-cork&location=ballincollig-cork&location=ovens-cork&numBeds_from=2")
         sleep(3)
         self.checkFeedback()
 
@@ -120,9 +125,12 @@ class Apply(SetUp):
 
         sleep(3)
         self.applied_url = self.driver.current_url
+        
+        # old '//*[@id="__next"]/main/div[3]/div[1]/div[1]/div/div[2]/h1'
         log_address = self.driver.find_element(
-            By.XPATH, '//*[@id="__next"]/main/div[3]/div[1]/div[1]/div/div[2]/h1'
+            By.XPATH, '//*[@id="__next"]/main/div[3]/div[1]/div[1]/div/div[2]/div[1]/h1'
         ).text
+        print(log_address)
         log_price = self.driver.find_element(
             By.XPATH,
             '//*[@id="__next"]/main/div[3]/div[1]/div[1]/div/div[2]/div[1]/span',
